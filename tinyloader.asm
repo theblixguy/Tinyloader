@@ -1,9 +1,9 @@
 ; tinyloader.asm
 ;
 ; ------------------------------------------------------
-; This bootloader operates in real addressing mode, which 
-; is also known as 16-bit. It's a really simply bootloader 
-; and outputs a message in the end.
+; This bootloader operates in real mode, which is also
+; known as 16-bit. It's a really simply bootloader and
+; outputs a message in the end.
 ; ------------------------------------------------------
 ;
 ; Author: Suyash Srijan
@@ -18,7 +18,13 @@ org 0x7C00 ; Tell the assembler to load the bootloader at address 0x7C00
 msgHi db "Hi!", 0x0 ; Say Hi to the user
 msg db "You're now in real mode :) ", 0x0 ; Tell him we are in 16-bit mode
 
-; This will print characters on the fucking screen 
+; This will hang your fucking machine 
+hangmachine:
+    cli ; Disable interrupts
+    hlt ; Halt the CPU
+    jmp hangmachine ; Loop, just in case a Non-Maskable Interrupt wakes up the processor
+
+	; This will print characters on the fucking screen 
 printaline:
     lodsb ; Load the damn string 
     cmp al, 0 ; Compare al with 0 
@@ -29,12 +35,6 @@ printaline:
 	               ; Hint: The answer starts with l and ends with p. If you said loop then you win a gold star!   	
     done:
     call printanewline ; Call printanewline() to print a new line
-
-; This will hang your fucking machine 
-hangmachine:
-    cli ; Disable interrupts
-    hlt ; Halt the CPU
-    jmp hangmachine ; Loop, just in case a Non-Maskable Interrupt wakes up the processor
 
 ; Bootloader's entry point
 main:
@@ -48,7 +48,6 @@ main:
    call printaline ; Call printaline() to print the Hello Message
    mov si, msg ; Copy the 16-bit mode message to source index register 
    call printaline ; Call printaline() to print the 16-bit mode message
-
    call hangmachine ; Call hangmachine to halt
 
    times 510 - ($-$$) db 0 ; Since the bootloader should be 512 bytes in size, we fill the rest of the memory with fucking zeroes ($ - $$ = length of our code)

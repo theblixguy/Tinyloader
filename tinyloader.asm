@@ -15,8 +15,8 @@ org 0x7C00 ; Tell the assembler to load the bootloader at address 0x7C00
 
     jmp main ; Jump to entry point, known as main() 
 
-msgHi db "Hi!", 0x0 ; Say Hi to the user
-msg db "You're now in real mode :) ", 0x0 ; Tell him we are in 16-bit mode
+    msgHi db "Hi!", 0x0 ; Say Hi to the user
+    msg db "You're now in real mode :) ", 0x0 ; Tell him we are in 16-bit mode
 
 ; This will hang your fucking machine 
 hangmachine:
@@ -36,7 +36,7 @@ printaline:
 done:
     mov al, 0 ; Copy null terminator to al
     stosb ; Store the fucking string
-    mov ah, 0x0E ; Copy shift out keycode to ah
+    mov ah, 0x0E ; Tell the BIOS that we want to put a char on the fucking screen
     mov al, 0x0D ; Copy carriage keycode to al
     int 10h ; BIOS interrupt call
     mov al, 0x0A ; Copy new line keycode to al

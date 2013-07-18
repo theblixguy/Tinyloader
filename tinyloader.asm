@@ -27,14 +27,10 @@ hangmachine:
 	; This will print characters on the fucking screen 
 printaline:
     lodsb ; Load the damn string 
-    cmp al, 0 ; Compare al with 0 
-    jz done ; Get the fuck out if zero
-    mov ah, 0x0e ; Not zero so lets tell the BIOS that we want to put a char on the fucking screen
+    mov ah, 0x0e ; Tell the BIOS that we want to put a char on the fucking screen
     int 10h  ; BIOS interrupt call
     jmp printaline ; Do I really need to tell you what this does?
-	               ; Hint: The answer starts with l and ends with p. If you said loop then you win a gold star!   	
-    done:
-    call printanewline ; Call printanewline() to print a new line
+	               ; Hint: The answer starts with l and ends with p. If you said loop then you win a gold star!
 
 ; Bootloader's entry point
 main:

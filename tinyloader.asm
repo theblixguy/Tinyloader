@@ -26,25 +26,35 @@ hangmachine:
 
 ; This will print characters on the fucking screen 
 printaline:
-    lodsb ; Load the damn string 
+    lodsb ; Load the damn string
+    cmp al, 0 ; Compare al register value with 0
+    jz done ; Get the fuck out if true
     mov ah, 0x0e ; Tell the BIOS that we want to put a char on the fucking screen
+    int 10h  ; BIOS interrupt call
+    jmp printaline
+done:
+    mov al, 0 ; Copy null terminator to al
+    stosb ; Store the fucking string
+    mov ah, 0x0E ; Copy shift out keycode to ah
+    mov al, 0x0D ; Copy carriage keycode to al
     int 10h ; BIOS interrupt call
-    jmp printaline ; Do I really need to tell you what this does?
-	           ; Hint: The answer starts with l and ends with p. If you said loop then you win a gold star!
+    mov al, 0x0A ; Copy new line keycode to al
+    int 10h ; BIOS interrupt call
+    ret ; Return from subroutine
 
 ; Bootloader's entry point
 main:
-   cli ; Disable the fucking interrupts
-   mov ax,cs ; Copy the value of cs register to ax register         
-   mov ds,ax ; Copy the value of ax register to ds register
-   mov es,ax ; Copy the value of ax register to es register              
-   mov ss,ax ; Copy the value of ax register to ss register               
-   sti ; Enable the fucking interrupts 
-   mov si, msgHi ; Copy the Hello message to source index register
-   call printaline ; Call printaline() to print the Hello Message
-   mov si, msg ; Copy the 16-bit mode message to source index register 
-   call printaline ; Call printaline() to print the 16-bit mode message
-   call hangmachine ; Call hangmachine to halt
+    cli ; Disable the fucking interrupts
+    mov ax,cs ; Copy the value of cs register to ax register         
+    mov ds,ax ; Copy the value of ax register to ds register
+    mov es,ax ; Copy the value of ax register to es register              
+    mov ss,ax ; Copy the value of ax register to ss register               
+    sti ; Enable the fucking interrupts 
+    mov si, msgHi ; Copy the Hello message to source index register
+    call printaline ; Call printaline() to print the Hello Message
+    mov si, msg ; Copy the 16-bit mode message to source index register 
+    call printaline ; Call printaline() to print the 16-bit mode message
+    call hangmachine ; Hang the machine
 
    times 510 - ($-$$) db 0 ; Since the bootloader should be 512 bytes in size, we fill the rest of the memory with fucking zeroes ($ - $$ = length of our code)
    dw 0xAA55 ; Tell the BIOS that this is a valid bootloader by setting the word AA55h at offset 510h

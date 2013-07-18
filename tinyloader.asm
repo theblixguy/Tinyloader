@@ -31,7 +31,8 @@ printaline:
     jz done ; Get the fuck out if true
     mov ah, 0x0e ; Tell the BIOS that we want to put a char on the fucking screen
     int 10h  ; BIOS interrupt call
-    jmp printaline
+    jmp printaline ; Do I really need to tell you what this does?
+                   ; Hint: The answer starts with l and ends with p. If you said loop then you win a gold star! 
 done:
     mov al, 0 ; Copy null terminator to al
     stosb ; Store the fucking string

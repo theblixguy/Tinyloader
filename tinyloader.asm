@@ -9,6 +9,7 @@
 ; Author: Suyash Srijan
 ; suyashsrijan@outlook.com
 ;
+; PS: The comments are just a reflection of my frustation with writing x86asm at 2 am
 
 bits 16 ; 16 because this bootloader operates in 16-bit
 org 0x7C00 ; Tell the assembler to load the bootloader at address 0x7C00 
